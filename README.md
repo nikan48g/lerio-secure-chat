@@ -6,8 +6,10 @@ credentials, infrastructure, or user data.
 
 ## Current, honest security status
 
-- Microphone access is user initiated, preceded by an in-app explanation, and
-  controlled by the browser permission system.
+- Microphone access is user initiated and controlled by the browser's native
+  Allow/Block permission prompt; Lerio shows recovery guidance only after denial.
+- `src/microphone-consent.js` is served by the production Chat UI and invokes the
+  browser's native Allow/Block prompt directly from the microphone button click.
 - Lerio uses HTTPS in production and restricts microphone and camera permissions
   to the same origin.
 - The production chat is **not yet end-to-end encrypted**. The server can currently
@@ -31,4 +33,3 @@ Security issues should be reported privately as described in [SECURITY.md](SECUR
 ## License
 
 MIT. The Lerio name and artwork are not granted as trademarks by this license.
-
