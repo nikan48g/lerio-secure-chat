@@ -1,35 +1,81 @@
-# Lerio Secure Chat — public security components
+<div dir="rtl" align="right">
 
-This repository contains security-sensitive components and design documents that
-Lerio can publish for independent review without exposing its private application,
-credentials, infrastructure, or user data.
+# لریو؛ اکوسیستم فارسی هویت، محتوا، گفتگو و ابزارهای روزمره
 
-## Current, honest security status
+لریو فقط یک چت‌روم نیست؛ مجموعه‌ای از سرویس‌های هماهنگ است که با حساب مشترک،
+رابط فارسی و تجربهٔ راست‌به‌چپ در وب کار می‌کنند.
 
-- Microphone access is user initiated and controlled by the browser's native
-  Allow/Block permission prompt; Lerio shows recovery guidance only after denial.
-- `src/microphone-consent.js` is served by the production Chat UI and invokes the
-  browser's native Allow/Block prompt directly from the microphone button click.
-- Lerio uses HTTPS in production and restricts microphone and camera permissions
-  to the same origin.
-- The production chat is **not yet end-to-end encrypted**. The server can currently
-  process message plaintext. We will not display an E2EE claim until the protocol,
-  key verification, multi-device behavior, backup behavior, and an independent
-  review are complete.
-- Authentication, authorization, transport security, and E2EE are separate
-  controls; none is presented as a substitute for another.
+> این مخزن نمای عمومی محصول، تصاویر واقعی، معماری و مسیر امنیت لریو است. اسرار
+> عملیاتی، دادهٔ کاربران و کد خصوصی زیرساخت در این مخزن منتشر نمی‌شوند.
 
-## Public roadmap
+## سرویس‌ها
 
-1. Publish threat model and protocol proposal.
-2. Build a versioned Web Crypto client with test vectors.
-3. Add per-device identity keys, signed prekeys, session rotation, and QR/safety-number verification.
-4. Encrypt message bodies and attachments before upload; keep private keys off the server.
-5. Commission an independent review, publish findings, and remediate them.
-6. Enable E2EE only for conversations that pass migration and device verification checks.
+| سرویس | کاربرد |
+|---|---|
+| Lerio Auth | ورود یکپارچه، نشست و هویت مشترک |
+| Lerio Blog | انتشار محتوا، پروفایل و تعامل اجتماعی |
+| Lerio Chat | گفتگوی مستقیم، گروه، کانال و پیام‌های ذخیره‌شده |
+| Lerio Eco | ابزارها و تجربه‌های مکمل |
+| Lerio Time | ابزارهای زمان و برنامه‌ریزی |
 
-Security issues should be reported privately as described in [SECURITY.md](SECURITY.md).
+## قابلیت‌های Chat
 
-## License
+- گفتگوی خصوصی، گروه، کانال و پیام‌های ذخیره‌شده
+- پاسخ، ویرایش، واکنش، سنجاق و گزارش پیام
+- عکس، فایل، پیام صوتی، نظرسنجی، چک‌لیست و تاریخ
+- دسترسی وابسته به عضویت و نقش همان گفتگو
+- رابط فارسی RTL، تم روشن/تیره و هویت بصری یوزپلنگ ایرانی
 
-MIT. The Lerio name and artwork are not granted as trademarks by this license.
+## تصاویر واقعی نسخهٔ در حال توسعه
+
+این تصاویر mockup یا تصویر تولیدشده با هوش مصنوعی نیستند.
+
+### پیام‌بار
+![پیام‌بار واقعی لریو](docs/screenshots/composer.png)
+
+### انتخاب‌گر ایموجی
+![انتخاب‌گر ایموجی واقعی لریو](docs/screenshots/emoji-picker.png)
+
+### منوی پیوست
+![منوی پیوست واقعی لریو](docs/screenshots/attachment-menu.png)
+
+### ارسال فایل
+![ارسال فایل واقعی لریو](docs/screenshots/file-send.png)
+
+## معماری
+
+مرورگر با سرویس‌های مستقل Auth، Blog، Chat، Eco و Time کار می‌کند. هویت بین
+سرویس‌ها با SSO امضاشده منتقل می‌شود و مجوزهای Chat در API همان گفتگو بررسی
+می‌شوند. جزئیات در [معماری عمومی](docs/ARCHITECTURE.md) آمده است.
+
+## امنیت؛ وضعیت قابل اثبات
+
+### کنترل‌های فعال
+
+- HTTPS و Permissions Policy
+- SSO امضاشده و نشست سمت سرور
+- Same-Origin برای عملیات تغییردهنده
+- کنترل عضویت و نقش در API هر گفتگو
+- Query پارامتری و جلوگیری از انتشار credential در مخزن عمومی
+
+### وضعیت E2EE
+
+production فعلی هنوز متن و فایل را End-to-End رمز نمی‌کند؛ پس ادعای «E2EE فعال»
+نداریم. [پروتکل هدف](docs/E2EE_PROTOCOL.md) مسیر واقعی را تعریف می‌کند: کلید هویت
+هر دستگاه، epoch گفتگو، رمزنگاری پیام و فایل در مرورگر، تأیید QR، revoke دستگاه،
+test vector عمومی و ممیزی مستقل.
+
+فعال‌شدن E2EE باید با سه مدرک همراه باشد:
+
+1. همان Crypto Client عمومی در production سرو شود؛
+2. test vector عمومی و مستقل پاس شود؛
+3. capture API نشان دهد سرور فقط envelope رمز‌شده دریافت می‌کند.
+
+مدل تهدید در [THREAT_MODEL.md](docs/THREAT_MODEL.md) و گزارش مسئولانه در
+[SECURITY.md](SECURITY.md) توضیح داده شده است.
+
+## مجوز
+
+کد و مستندات عمومی تحت MIT هستند. نام و نشان لریو با این مجوز واگذار نمی‌شوند.
+
+</div>

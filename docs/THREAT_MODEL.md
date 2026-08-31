@@ -1,33 +1,29 @@
-# Threat model and E2EE acceptance criteria
+# مدل تهدید لریو
 
-## Protected data
+## دارایی‌های حساس
 
-Message text, attachments, voice notes, conversation membership, device identity,
-and encryption keys. Metadata minimization is a separate goal from content encryption.
+متن پیام، فایل، صوت، عضویت گفتگو، نشست، هویت دستگاه و کلیدهای رمزنگاری.
 
-## In scope
+## مهاجمان داخل محدوده
 
-- Passive and active network attackers
-- A compromised or curious application server
-- Stolen session cookies and unauthorized conversation access
-- Malicious message/attachment content
-- Lost devices and revoked devices
+- مهاجم فعال یا شنودگر شبکه
+- سرور کنجکاو یا compromise‌شده
+- نشست سرقت‌شده، عضو مخرب گروه و دستگاه گم‌شده
+- محتوای ساخته‌شده برای XSS یا سوءاستفاده
 
-## Not automatically solved by E2EE
+## مواردی که E2EE به‌تنهایی حل نمی‌کند
 
-Compromised endpoints, screenshots, recipients forwarding content, traffic metadata,
-weak account recovery, and malicious browser extensions.
+دستگاه آلوده، screenshot، انتقال محتوا توسط گیرنده، metadata ترافیک، افزونهٔ مخرب
+مرورگر و بازیابی حساب ضعیف.
 
-## Required before Lerio may claim E2EE
+## معیار ادعای E2EE
 
-- Encryption and decryption occur only on participant devices.
-- The server never receives conversation private keys or message plaintext.
-- New devices cannot silently join an encrypted conversation.
-- Users can compare QR codes or safety numbers.
-- Key changes are visible and have a documented blocking/warning policy.
-- Attachments and voice notes are encrypted client-side with unique keys.
-- Replay, reordering, deletion, and downgrade behavior have tests.
-- Backups state clearly whether they are encrypted and how recovery keys work.
-- Published test vectors pass across supported clients.
-- An independent review has no unresolved critical finding.
+- کلید خصوصی فقط روی دستگاه کاربر
+- رمزنگاری و رمزگشایی فقط روی دستگاه اعضا
+- ناتوانی سرور در خواندن متن، فایل و صوت
+- هشدار تغییر کلید و جلوگیری از افزودن خاموش دستگاه
+- QR یا safety number
+- rotation و revoke دستگاه
+- تست replay، reorder و downgrade
+- test vector عمومی و ممیزی مستقل بدون یافتهٔ بحرانی حل‌نشده
 
