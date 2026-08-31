@@ -71,6 +71,10 @@ test vector عمومی و ممیزی مستقل.
 2. test vector عمومی و مستقل پاس شود؛
 3. capture API نشان دهد سرور فقط envelope رمز‌شده دریافت می‌کند.
 
+Crypto Client آزمایشی پیام و فایل در `src/e2ee/crypto.js` و test vector قابل اجرا در
+`tests/e2ee-vectors.mjs` قرار دارد. اجرای `npm run test:e2ee` باید `PASS` بدهد؛ وجود
+این تست به‌تنهایی به معنی فعال‌بودن E2EE در production نیست.
+
 مدل تهدید در [THREAT_MODEL.md](docs/THREAT_MODEL.md) و گزارش مسئولانه در
 [SECURITY.md](SECURITY.md) توضیح داده شده است.
 

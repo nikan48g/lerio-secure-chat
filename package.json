@@ -1,0 +1,8 @@
+{
+  "name": "lerio-public",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:e2ee": "node tests/e2ee-vectors.mjs"
+  }
+}

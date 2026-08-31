@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Lerio E2EE v1 browser vectors</title>
+<pre id="result">running…</pre>
+<script type="module">
+import { generateConversationKey, encryptMessage, decryptMessage, encryptAttachment, decryptAttachment } from "../src/e2ee/crypto.js";
+
+const metadata = { conversationId: 42, epoch: 1, senderDeviceId: "test-device", counter: 1 };
+const key = await generateConversationKey();
+const message = "پیام آزمایشی لریو 🐆";
+const envelope = await encryptMessage(key, message, metadata);
+const recovered = await decryptMessage(key, envelope);
+if (recovered !== message || envelope.ciphertext.includes(message)) throw new Error("message vector failed");
+
+const file = new TextEncoder().encode("private attachment bytes");
+const fileMetadata = { conversationId: 42, epoch: 1, name: "proof.txt", size: file.length };
+const encryptedFile = await encryptAttachment(key, file, fileMetadata);
+const recoveredFile = await decryptAttachment(key, encryptedFile, fileMetadata);
+if (new TextDecoder().decode(recoveredFile) !== new TextDecoder().decode(file)) throw new Error("attachment vector failed");
+
+document.querySelector("#result").textContent = JSON.stringify({
+  status: "PASS",
+  suite: envelope.suite,
+  plaintextVisibleInCiphertext: envelope.ciphertext.includes(message),
+  messageRoundTrip: recovered === message,
+  attachmentRoundTrip: true,
+}, null, 2);
+</script>
